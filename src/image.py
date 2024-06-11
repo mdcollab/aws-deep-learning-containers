@@ -203,6 +203,8 @@ class DockerImage:
             buildargs=self.build_args,
             labels=self.labels,
             target=self.target,
+            # nocache=True,
+            platform="linux/amd64",
         ):
             if line.get("error") is not None:
                 response.append(line["error"])

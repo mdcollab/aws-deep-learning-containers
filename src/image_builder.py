@@ -17,7 +17,10 @@ import concurrent.futures
 import datetime
 import os
 import re
+import sys
 import tempfile
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 from copy import deepcopy
 

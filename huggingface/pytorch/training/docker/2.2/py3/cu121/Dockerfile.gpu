@@ -1,0 +1,71 @@
+# https://github.com/aws/deep-learning-containers/blob/master/available_images.md
+# refer to the above page to pull latest Pytorch image
+
+# docker image region us-west-2
+FROM 763104351884.dkr.ecr.us-west-2.amazonaws.com/pytorch-training:2.2.0-gpu-py310-cu121-ubuntu20.04-sagemaker
+
+LABEL maintainer="Amazon AI"
+LABEL dlc_major_version="1"
+
+# version args
+ARG TRANSFORMERS_VERSION
+ARG DATASETS_VERSION
+ARG DIFFUSERS_VERSION=0.27.2
+ARG EVALUATE_VERSION=0.4.2
+ARG ACCELERATE_VERSION=0.29.3
+ARG TRL_VERSION=0.8.6
+ARG PEFT_VERSION=0.10.0
+ARG FLASH_ATTN_VERSION=2.5.8
+ARG PYTHON=python3
+
+# TODO: Remove when the base image is updated
+RUN pip install --upgrade pip \
+ && pip uninstall -y transformer-engine flash-attn pyarrow cryptography \
+ && pip install --no-cache-dir -U pyarrow cryptography pyopenssl Pillow
+
+# install Hugging Face libraries and its dependencies
+RUN pip install --no-cache-dir \
+	transformers[sklearn,sentencepiece,audio,vision]==${TRANSFORMERS_VERSION} \
+	datasets==${DATASETS_VERSION} \
+	diffusers==${DIFFUSERS_VERSION} \
+	Jinja2 \
+	tensorboard \
+	bitsandbytes \
+	evaluate==${EVALUATE_VERSION} \
+	accelerate==${ACCELERATE_VERSION} \
+	trl==${TRL_VERSION} \
+	peft==${PEFT_VERSION} \
+	ninja \
+	flash-attn==${FLASH_ATTN_VERSION}
+
+ENV EIGEN3_INCLUDE_DIR=/usr/include/eigen3 \
+	BZIP2_INCLUDE_DIR=/usr/include \
+	BZIP2_LIBRARIES=/usr/lib/x86_64-linux-gnu \
+	LIBLZMA_INCLUDE_DIR=/usr/include \
+	LIBLZMA_LIBRARY=/usr/lib/x86_64-linux-gnu
+
+RUN apt-get update \
+ # TODO: Remove upgrade statements once packages are updated in base image
+ && apt-get -y upgrade --only-upgrade systemd openssl cryptsetup \
+ && apt-get install -y git-lfs \
+    build-essential \
+    cmake \ 
+    libboost-system-dev \
+    libboost-thread-dev \
+    libboost-program-options-dev \
+    libboost-test-dev \
+    libeigen3-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    liblzma-dev \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+# RUN HOME_DIR=/root \
+#  && curl -o ${HOME_DIR}/oss_compliance.zip https://aws-dlinfra-utilities.s3.amazonaws.com/oss_compliance.zip \
+#  && unzip ${HOME_DIR}/oss_compliance.zip -d ${HOME_DIR}/ \
+#  && cp ${HOME_DIR}/oss_compliance/test/testOSSCompliance /usr/local/bin/testOSSCompliance \
+#  && chmod +x /usr/local/bin/testOSSCompliance \
+#  && chmod +x ${HOME_DIR}/oss_compliance/generate_oss_compliance.sh \
+#  && ${HOME_DIR}/oss_compliance/generate_oss_compliance.sh ${HOME_DIR} ${PYTHON} \
+#  && rm -rf ${HOME_DIR}/oss_compliance*

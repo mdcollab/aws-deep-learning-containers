@@ -51,9 +51,9 @@ class CommonStageImage(DockerImage):
             "src",
             f"{tarfile_name_for_context}_safety_report.json",
         )
-        generate_safety_report_for_image(
-            pre_push_stage_image_uri, image_info=self.info, storage_file_path=storage_file_path
-        )
+        # generate_safety_report_for_image(
+        #     pre_push_stage_image_uri, image_info=self.info, storage_file_path=storage_file_path
+        # )
         self.context = self.generate_common_stage_context(
             storage_file_path, tarfile_name=tarfile_name_for_context
         )
@@ -64,7 +64,7 @@ class CommonStageImage(DockerImage):
         the Dockerfile.common uses this safety report to COPY the report into the image.
         """
         artifacts = {
-            "safety_report": {"source": safety_report_path, "target": "safety_report.json"},
+            # "safety_report": {"source": safety_report_path, "target": "safety_report.json"},
             "dockerfile": {
                 "source": os.path.join(
                     os.sep,

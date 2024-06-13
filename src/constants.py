@@ -44,7 +44,7 @@ PRE_PUSH_STAGE = "pre_push"
 COMMON_STAGE = "common"
 
 # Docker connections
-DOCKER_URL = "unix://var/run/docker.sock"
+DOCKER_URL = "unix:///Users/himanshu/.colima/default/docker.sock"
 
 STATUS_MESSAGE = {
     SUCCESS: "Success",

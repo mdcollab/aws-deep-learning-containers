@@ -27,8 +27,9 @@ ARG TORCHAUDIO_URL=https://framework-binaries.s3.us-west-2.amazonaws.com/pytorch
 # HF ARGS
 ARG TRANSFORMERS_VERSION
 ARG DIFFUSERS_VERSION=0.27.2
-ARG PEFT_VERSION=0.10.0
-ARG ACCELERATE_VERSION=0.29.3
+ARG PEFT_VERSION=0.11.1
+ARG ACCELERATE_VERSION=0.31.0
+ARG XFORMERS_VERSION=0.0.26.post1
 
 # This arg required to stop docker build waiting for region configuration while installing tz data from ubuntu 20
 ENV DEBIAN_FRONTEND=noninteractive
@@ -175,7 +176,7 @@ RUN pip install --no-cache-dir -U \
     opencv-python \
     # "nvgpu" is a dependency of TS but is disabled in SM DLC build,
     # via ENV Variable "TS_DISABLE_SYSTEM_METRICS=true" in the SM section of this file.
-    # due to incompatibility with SM hosts 
+    # due to incompatibility with SM hosts
     nvgpu \
     "pyopenssl>=24.0.0" \
     enum-compat==0.0.3 \
@@ -234,13 +235,16 @@ RUN curl -o /license.txt  https://aws-dlc-licenses.s3.amazonaws.com/pytorch-2.0/
 
 # install Hugging Face libraries and its dependencies
 RUN pip install --no-cache-dir \
-	transformers[sentencepiece,audio,vision]==${TRANSFORMERS_VERSION} \
+    transformers[sentencepiece,audio,vision]==${TRANSFORMERS_VERSION} \
     diffusers==${DIFFUSERS_VERSION} \
     peft==${PEFT_VERSION} \
     accelerate==${ACCELERATE_VERSION} \
-	"protobuf>=3.19.5,<=3.20.2" \
-	"numpy>=1.22.2,<1.23" \
-	"sagemaker-huggingface-inference-toolkit==2.3"
+    xformers==${XFORMERS_VERSION} \
+    "protobuf>=3.19.5,<=3.20.2" \
+    "numpy>=1.22.2,<1.23" \
+    "sagemaker-huggingface-inference-toolkit==2.3"
+
+RUN pip install "unsloth @ git+https://github.com/unslothai/unsloth.git"
 
 # RUN HOME_DIR=/root \
 #  && curl -o ${HOME_DIR}/oss_compliance.zip https://aws-dlinfra-utilities.s3.amazonaws.com/oss_compliance.zip \

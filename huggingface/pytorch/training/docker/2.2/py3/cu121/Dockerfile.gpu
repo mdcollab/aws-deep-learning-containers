@@ -10,7 +10,6 @@ LABEL dlc_major_version="1"
 # version args
 ARG TRANSFORMERS_VERSION
 ARG DATASETS_VERSION
-ARG DIFFUSERS_VERSION=0.27.2
 ARG EVALUATE_VERSION=0.4.2
 ARG ACCELERATE_VERSION=0.31.0
 ARG TRL_VERSION=0.9.4
@@ -27,11 +26,9 @@ RUN pip install --upgrade pip \
 
 # install Hugging Face libraries and its dependencies
 RUN pip install --no-cache-dir \
-	transformers[sklearn,sentencepiece,audio,vision]==${TRANSFORMERS_VERSION} \
+	transformers[sklearn,sentencepiece]==${TRANSFORMERS_VERSION} \
 	datasets==${DATASETS_VERSION} \
-	diffusers==${DIFFUSERS_VERSION} \
 	Jinja2 \
-	tensorboard \
 	bitsandbytes==${BITS_ANDBYTES_VERSION} \
 	evaluate==${EVALUATE_VERSION} \
 	accelerate==${ACCELERATE_VERSION} \

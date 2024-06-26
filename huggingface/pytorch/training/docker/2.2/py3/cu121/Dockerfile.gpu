@@ -14,7 +14,7 @@ ARG EVALUATE_VERSION=0.4.2
 ARG ACCELERATE_VERSION=0.31.0
 ARG TRL_VERSION=0.9.4
 ARG PEFT_VERSION=0.11.1
-ARG FLASH_ATTN_VERSION=2.5.7
+ARG FLASH_ATTN_VERSION=2.5.8
 ARG BITS_ANDBYTES_VERSION=0.43.1
 ARG PYTHON=python3
 ARG XFORMERS_VERSION=0.0.26.post1
@@ -24,6 +24,7 @@ RUN pip install --upgrade pip \
  && pip uninstall -y transformer-engine flash-attn pyarrow cryptography \
  && pip install --no-cache-dir -U pyarrow cryptography pyopenssl Pillow
 
+RUN pip install torch==2.3.0 --index-url https://download.pytorch.org/whl/cu121
 RUN pip uninstall -y transformer-engine
 RUN pip install --no-cache-dir \
 	transformers[sklearn,sentencepiece]==${TRANSFORMERS_VERSION}

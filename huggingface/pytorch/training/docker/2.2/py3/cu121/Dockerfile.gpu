@@ -24,9 +24,12 @@ RUN pip install --upgrade pip \
  && pip uninstall -y transformer-engine flash-attn pyarrow cryptography \
  && pip install --no-cache-dir -U pyarrow cryptography pyopenssl Pillow
 
+RUN pip uninstall -y transformer-engine
+RUN pip install --no-cache-dir \
+	transformers[sklearn,sentencepiece]==${TRANSFORMERS_VERSION}
+
 # install Hugging Face libraries and its dependencies
 RUN pip install --no-cache-dir \
-	transformers[sklearn,sentencepiece]==${TRANSFORMERS_VERSION} \
 	datasets==${DATASETS_VERSION} \
 	Jinja2 \
 	bitsandbytes==${BITS_ANDBYTES_VERSION} \

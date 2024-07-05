@@ -28,6 +28,7 @@ ARG PEFT_VERSION=0.11.1
 ARG ACCELERATE_VERSION=0.31.0
 ARG XFORMERS_VERSION=0.0.26.post1
 ARG BITS_ANDBYTES_VERSION=0.43.1
+ARG TRL_VERSION=0.9.4
 
 # This arg required to stop docker build waiting for region configuration while installing tz data from ubuntu 20
 ENV DEBIAN_FRONTEND=noninteractive
@@ -238,6 +239,7 @@ RUN pip install --no-cache-dir \
 RUN pip install --no-cache-dir \
     peft==${PEFT_VERSION} \
     accelerate==${ACCELERATE_VERSION} \
+    trl==${TRL_VERSION} \
     bitsandbytes==${BITS_ANDBYTES_VERSION} \
     xformers==${XFORMERS_VERSION} \
     "protobuf>=3.19.5,<=3.20.2" \

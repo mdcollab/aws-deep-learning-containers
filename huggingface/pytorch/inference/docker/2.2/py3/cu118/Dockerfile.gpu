@@ -228,9 +228,13 @@ RUN chmod +x /usr/local/bin/deep_learning_container.py
 
 RUN curl -o /license.txt  https://aws-dlc-licenses.s3.amazonaws.com/pytorch-2.0/license.txt
 
+RUN pip install torch==2.3.0 --index-url https://download.pytorch.org/whl/cu121
+RUN pip uninstall -y transformer-engine
+RUN pip install --no-cache-dir \
+	transformers[sklearn,sentencepiece]==${TRANSFORMERS_VERSION}
+
 # install Hugging Face libraries and its dependencies
 RUN pip install --no-cache-dir \
-    transformers[sentencepiece]==${TRANSFORMERS_VERSION} \
     peft==${PEFT_VERSION} \
     accelerate==${ACCELERATE_VERSION} \
     xformers==${XFORMERS_VERSION} \
